@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manual AD Forest Recovery Steps</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    line-height: 1.45;
+    padding: 36px 40px;
+    min-width: 1380px;
+  }
+
+  .title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 18px;
+    letter-spacing: 0.01em;
+  }
+
+  .legend {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 0.4empx;
+    align-items: center;
+    padding-bottom: 0.6em;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.8em;
+    color: #ccc;
+  }
+
+  .legend-swatch {
+    width: 3px;
+    height: 16px;
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  .swatch-red   { background: #c0392b; }
+  .swatch-amber { background: #b8860b; }
+  .swatch-white { background: #ccc; }
+
+  /* Layout */
+  .main-layout {
+    display: flex;
+    border: 1px solid #1e1e1e;
+    border-top: 2px solid #2a2a2a;
+  }
+
+  .columns-area {
+    display: flex;
+    flex: 1;
+    position: relative;
+  }
+
+  /* Horizontal timeline bar */
+  .timeline-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #1a1a1a;
+    border-top: 1px solid #2a2a2a;
+  }
+
+  .column {
+    flex: 1;
+    padding: 18px 14px 26px;
+    border-right: 1px solid #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+    position: relative;
+  }
+
+  .column:last-child {
+    border-right: none;
+  }
+
+  /* Column marker on timeline */
+  .column::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #2e2e2e;
+    border-radius: 50%;
+    border: 1px solid #3a3a3a;
+  }
+
+  .step {
+    line-height: 2;
+    padding-left: 3px;
+    border-left: 2px solid transparent;
+    padding-left: 6px;
+  }
+
+  .step.red   { border-left-color: #c0392b; }
+  .step.amber { border-left-color: #b8860b; }
+  .step.white { border-left-color: #ccc; }
+
+  .step-num {
+    font-weight: bold;
+    margin-right: 3px;
+    font-size: 0.7em;
+  }
+
+
+  .fontred { color: #c0392b !important; }
+  .fontyellow { color: #b8860b !important; }
+
+  .step em {
+    font-style: italic;
+    font-size: 0.8em;
+    color: #aaa;
+  }
+
+  .wait-icon {
+    font-size: 0.7em;
+    opacity: 0.7;
+    margin: 0 1px;
+  }
+
+  .group-label {
+    font-size: 0.8em;
+    color: #ddd;
+    font-style: italic;
+    border-bottom: 1px solid #181818;
+    padding-bottom: 3px;
+    margin-top: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    font-size: 11pt;
+    width: 310px;
+    flex-shrink: 0;
+    background: #060606;
+    border-left: 1px solid #1e1e1e;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .sidebar-heading {
+    font-weight: bold;
+    color: #b8860b;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .sidebar-section h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    color: #ddd;
+    margin-bottom: 5px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .sidebar-section p {
+    color: #aaa;
+    line-height: 1.55;
+  }
+
+  .sidebar-section p strong {
+    color: #ccc;
+    font-weight: bold;
+  }
+
+  .sidebar-section p.sidebar-warning {
+    margin-top: 0.4em;
+    color: #b8860b;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="title">Manual Active Directory Forest Recovery Steps</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-swatch swatch-red"></div>
+    Fully manual = No tools to help
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch swatch-amber"></div>
+    Scritable w/native tools (PowerShell, etc.)
+  </div>
+  <div class="legend-item">
+    <div class="legend-swatch swatch-white"></div>
+    Purpose-built tools shine
+  </div>
+</div>
+
+<div class="main-layout">
+  <div class="columns-area">
+    <!-- Column 1: Steps 1–11 -->
+    <div class="column">
+      <div class="step red"><span class="step-num num-red">1.</span>Disable network to/from DCs.</div>
+      <div class="step red"><span class="step-num num-red">2.</span>Connect new/restored DCs to private network <em>+ someone has to setup a private VPN</em></div>
+      <div class="group-label">For each domain:</div>
+      <div class="step amber"><span class="step-num num-amber">3.</span>Nonauthoritative restore of first writeable DC</div>
+      <div class="step amber"><span class="step-num num-amber">4.</span>Authoritative restore of SYSVOL on that first DC</div>
+      <div class="step red"><span class="step-num num-red">5.</span>Cleanup malware...</div>
+      <div class="step amber"><span class="step-num num-amber">6.</span>Roll all admin account passwords</div>
+      <div class="step amber"><span class="step-num num-amber">7.</span>Seize FSMO roles</div>
+      <div class="step white"><span class="step-num num-white">8.</span>Metadata cleanup of all writeable DCs NOT restored yet.</div>
+      <div class="step amber"><span class="step-num num-amber">9.</span>Setup DNS on the forest root DC (if using ADI DNS)</div>
+      <div class="step white"><span class="step-num num-white">10.</span>Remove the global catalog from each DC <span class="wait-icon">⏱</span><em>(wait for GC to be removed)</em></div>
+      <div class="step amber"><span class="step-num num-amber">11.</span>Delete DNS NS records of DCs that are gone</div>
+      
+      <div class="timeline-bar"></div>
+    </div>
+
+    <!-- Column 2: Steps 12–22 -->
+    <div class="column">
+      <div class="step amber"><span class="step-num num-amber">12.</span>Delete DNS SRV records of DCs that are gone</div>
+      <div class="step amber"><span class="step-num num-amber">13.</span>Jump the RID pools by 100K</div>
+      <div class="step amber"><span class="step-num num-amber">14.</span>Invalidate the current RID pool for every DC</div>
+      <div class="step amber"><span class="step-num num-amber">15.</span>Reset the computer account of the root DC 2x</div>
+      <div class="step amber"><span class="step-num num-amber">16.</span>Reset krbtgt account twice <em>(starter forest begins here)</em></div>
+      <div class="step amber"><span class="step-num num-amber">17.</span>Setup Windows Time</div>
+      <div class="step amber"><span class="step-num num-amber">18.</span>Nonauthoritative restore of other DCs in the domain</div>
+      <div class="step white"><span class="step-num num-white">19.</span>Add GC on a DC for each OS version in domain <span class="wait-icon">⏱</span><em>(wait for GCs to create)</em></div>
+      <div class="step amber"><span class="step-num num-amber">20.</span>Take a backup of all DCs in the starter forest</div>
+      <div class="step white"><span class="step-num num-white">21.</span>Create an IFM package for each OS version in each domain <em>(option, but can speed stuff up)</em></div>
+      <div class="step white"><span class="step-num num-white">22.</span>Build out new forest with more DCs to support admin/server admin operations</div>
+      <div class="timeline-bar"></div>
+    </div>
+
+    <!-- Column 3: Steps 23-29 -->
+    <div class="column">
+      
+      <div class="group-label">For each DC to be repromoted:</div>
+      <div class="step red"><span class="step-num num-red">23.</span>Clean up gone DC using /FORCEREMOVAL or rebuild OS</div>
+      <div class="step white"><span class="step-num num-white">24.</span>Copy IFM package to server <span class="wait-icon">⏱</span><em>(Wait...) (Secure this!)</em></div>
+      <div class="step red"><span class="step-num num-red">25.</span>Take the DC off the public net and put it on the new forest network</div>
+      <div class="step white"><span class="step-num num-white">26.</span>Run a DCPROMO / DCPROMO IFM <span class="wait-icon">⏱</span><em>(all domains going to take days. may get basics running here.)</em></div>
+      <div class="step amber"><span class="step-num num-amber">27.</span>Verify forest health</div>
+      <div class="step red"><span class="step-num num-red">28.</span>Move new forest to the corp network</div>
+      <div class="step amber"><span class="step-num num-amber">29.</span>Reboot all servers and clients in forest to communicate with new forest</div>
+      <div class="timeline-bar"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-heading">Important Considerations</div>
+
+    <div class="sidebar-section">
+      <h3>Manual recovery is error-prone</h3>
+      <p>Mistakes are bound to happen. However, mistakes force <strong>starting over from scratch</strong> which means more time!</p>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Native Tools Suck</h3>
+      <p>Native tools only help with individual steps — <strong>none connect everything</strong>. Most don't support multi-domain/forest very well.</p>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Lots of Hands Make Confusing Work</h3>
+      <p>Core identity/AD team, ops at every datacenter, + external support. Estimated <strong>10–15 IT staff</strong> in an avg. enterprise.</p>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Time reality</h3>
+      <p><strong>Days to weeks</strong> without purpose-built tooling. Every hour AD is down is every hour your business is down.</p>
+      <p class="sidebar-warning">Months to Never if backups get compromised/don't exist. </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
