@@ -1,0 +1,12 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.col {
+  flex: 1 1 300px;          /* grow, shrink, min‑width */
+}
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
