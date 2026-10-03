@@ -1,0 +1,4 @@
+- **PKI Foundations for Security Pros**, with Jake Hildreth. Antisyphon Training, 2025. [:fontawesome-brands-youtube: Video](https://www.youtube.com/watch?v=8jEZ3l6dR6c)
+- **A Miser's Guide to Hardening Active Directory**. BSides KC, 2026. [:fontawesome-brands-youtube: Video](https://www.youtube.com/watch?v=noolaWmjogk), [:fontawesome-brands-github: Notes and materials](https://github.com/ActiveDirectoryKC/BSidesKC2026-AMisersGuideToHardeningAD)
+- **Hardening Active Directory Against Real-World Attacks**. Zero to Sec. [:fontawesome-brands-youtube: Video](https://www.youtube.com/watch?v=0_JKi_ldoWM)
+- **PKI For Security Pros, With Trains**. Hobocon, 2026. [:fontawesome-brands-github: Materials](https://github.com/ActiveDirectoryKC/PKIFoundationsTrains)

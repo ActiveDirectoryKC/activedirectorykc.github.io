@@ -1,0 +1,101 @@
+site_name: ActiveDirectoryKC.NET
+site_url: https://www.activedirectorykc.net/
+copyright: Copyright &copy; 2020 - 2026 Tyler Jacobs
+repo_url: https://github.com/ActiveDirectoryKC
+repo_name: GitHub
+
+theme:
+  name: material
+  favicon: assets/ADKC_LittleIcon.png
+  icon:
+    logo: material/home
+    repo: fontawesome/brands/git-alt
+  palette:
+    - scheme: slate
+      primary: blue
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: dark mode
+    - scheme: default
+      primary: blue
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: light mode
+  features:
+    - navigation.indexes
+    - navigation.tabs
+    - navigation.top
+    - toc.integrate
+    - search.highlight
+    - content.code.annotate
+    - content.grid
+
+hooks:
+  - hooks/copyright.py
+  - hooks/legacy_redirects.py
+
+extra_css:
+  - assets/custom.css
+
+nav:
+  - Home: index.md
+  - About: about.md
+  - Resources:
+      - resources/index.md
+      - Start here:
+          - resources/beginners-guide.md
+          - resources/intermediate.md
+      - Big lists:
+          - resources/ad-resources.md
+          - resources/ad-tools.md
+          - resources/mcm-links.md
+      - Subreddit info:
+          - resources/subreddit-rules.md
+          - resources/listing-guidelines.md
+  - Reddit-AD-Wiki: https://reddit.com/r/ActiveDirectory/wiki
+
+plugins:
+  - search
+  - blog:
+      blog_dir: .
+      post_url_format: "posts/{date}/{slug}"
+      archive_toc: true
+
+watch:
+  - snippets
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.magiclink
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: snippets
+      check_paths: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ActiveDirectoryKC
+      name: github.com
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/thetylerjacobs
+      name: www.linkedin.com
+    - icon: fontawesome/brands/square-reddit
+      link: https://reddit.com/r/ActiveDirectory
+      name: reddit.com
+    - icon: fontawesome/brands/reddit-alien
+      link: https://reddit.com/u/poolmanjim
+      name: reddit.com
+    - icon: fontawesome/brands/discord
+      link: https://discordapp.com/users/316222972501295104
+      name: "@poolmanjim"
